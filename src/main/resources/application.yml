@@ -6,3 +6,6 @@ spring:
 
 app:
   transactionDateAge: 30
+
+server:
+  port: ${PORT:5000}

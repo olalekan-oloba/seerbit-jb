@@ -61,7 +61,7 @@ public class TransactionControllerTest {
     void shouldFail_With400_WhenPostTransactionWithInvalidJson(String requestPayload) throws Exception {
         //input
         mockMvc.perform(post("/transactions").contentType("application/json").content(requestPayload))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
 
