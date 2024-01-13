@@ -28,16 +28,24 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     @Override
     public void save(Transaction transaction) {
+        this.saveNewTransaction(transaction);
+        if(!olderThanAge(transaction.getTimeStamp(),propertiesConfig.getApp().getTransactionDateAge())) {
+           updateStatistics(transaction);
+        }
+    }
+
+    private void updateStatistics(Transaction transaction) {
+        updateTransactionSum(transaction.getAmount());
+        updateTransactionMax(transaction.getAmount());
+        updateTransactionMin(transaction.getAmount());
+        updateTransactionCount();
+    }
+
+    private void saveNewTransaction(Transaction transaction) {
         if(transactions==null){
             transactions=new ArrayList<>();
         }
         this.transactions.add(transaction);
-        if(!olderThanAge(transaction.getTimeStamp(),propertiesConfig.getApp().getTransactionDateAge())) {
-            updateTransactionSum(transaction.getAmount());
-            updateTransactionMax(transaction.getAmount());
-            updateTransactionMin(transaction.getAmount());
-            updateTransactionCount();
-        }
     }
 
     @Override
@@ -51,6 +59,22 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return statistic;
     }
 
+    @Override
+    public void deleteTransactions() {
+        deleteAllTransactions();
+        clearStatistics();
+    }
+
+    private void clearStatistics() {
+        this.setTransactionCount(0);;
+        this.setTransactionMin(null);
+        this.setTransactionMax(null);
+        this.setTransactionSum(null);
+    }
+
+    private void deleteAllTransactions() {
+        this.transactions=null;
+    }
 
     private void updateTransactionCount() {
         this.transactionCount++;

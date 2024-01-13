@@ -303,4 +303,29 @@ public class TransactionRepositoryTest {
     }
 
 
+    @Test
+    @DisplayName("should delete txns successfully")
+    void givenTransactionsExist_WhenSaveNewTransaction_ShouldNotUpdateTxnStatistics() throws Exception {
+        //arrange
+        var existingTxn=new Transaction();
+        existingTxn.setAmount(BigDecimal.valueOf(5.00));
+        existingTxn.setTimeStamp(nowInstant());
+        //add existingTxn to transaction list
+        repository.getTransactions().add(existingTxn);
+
+        repository.setTransactionMax(BigDecimal.valueOf(5.00));
+        repository.setTransactionMin(BigDecimal.valueOf(5.00));
+        repository.setTransactionCount(1L);
+        repository.setTransactionSum(BigDecimal.valueOf(5.00));
+
+        //act
+        this.repository.deleteTransactions();
+        //assert stats cleared
+        assertThat(repository.getTransactionMax(), is(equalTo(null)));
+        assertThat(repository.getTransactionMin(), is(equalTo(null)));
+        assertThat(repository.getTransactionCount(), is(equalTo(0L)));
+        assertThat(repository.getTransactionSum(), is(equalTo(null)));
+        assertThat(repository.getTransactions(), is(equalTo(null)));
+    }
+
 }

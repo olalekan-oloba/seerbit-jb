@@ -36,8 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -217,6 +216,20 @@ public class TransactionControllerTest {
     }
 
 
+
+    @Test
+    void shouldDeleteTransactionsSuccessfully() throws Exception {
+        //arrange
+        doNothing().when(postTransactionService).deleteTransactions();
+        //act
+        var resultActions= mockMvc.perform(delete("/transactions").contentType("application/json").content(new JSONObject().toString()));
+        //assert
+        verify(postTransactionService, times(1)).deleteTransactions();
+
+        resultActions.andExpect(status().isNoContent());
+        //assert empty body
+        assertEmptyBody(resultActions.andReturn());
+    }
 
     private void assertEmptyBody(MvcResult mvcResult) throws UnsupportedEncodingException {
         String body = TestUtils.objectFromResponseStr(mvcResult.getResponse().getContentAsString(), "$.data").toString();

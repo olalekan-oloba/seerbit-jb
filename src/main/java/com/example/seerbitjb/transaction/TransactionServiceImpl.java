@@ -34,6 +34,11 @@ public class TransactionServiceImpl implements TransactionService {
         return mapStatisticModelToDto(statistic);
     }
 
+    @Override
+    public void deleteTransactions() {
+       this.repository.deleteTransactions();
+    }
+
     private StatisticsDetailsDto mapStatisticModelToDto(Statistics statistic) {
         //TODO: use a mapper class
         return StatisticsDetailsDto.builder()

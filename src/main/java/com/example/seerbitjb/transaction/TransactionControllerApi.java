@@ -52,6 +52,18 @@ public class TransactionControllerApi {
     }
 
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Success"),
+    })
+    @Operation(summary = "Delete all transactions", description = "")
+    @DeleteMapping(value = "/transactions")
+    public ResponseEntity<ApiDataResponse<EmptyResponseBody>> deleteTransactions(@RequestBody EmptyResponseBody body ) throws Exception {
+        this.postTransactionService.deleteTransactions();
+        return ApiResponseUtil.response(HttpStatus.NO_CONTENT, new EmptyResponseBody(),"Resources deleted successfully");
+    }
+
+
+
     private HttpStatus processResponseStatus(Instant requestTransactionDate) {
         //get current time
         Instant currentTime = nowInstant();
