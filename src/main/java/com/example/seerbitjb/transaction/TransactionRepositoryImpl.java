@@ -34,7 +34,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         }
     }
 
-    private void updateStatistics(Transaction transaction) {
+    private synchronized void updateStatistics(Transaction transaction) {
         updateTransactionSum(transaction.getAmount());
         updateTransactionMax(transaction.getAmount());
         updateTransactionMin(transaction.getAmount());
@@ -60,7 +60,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public void deleteTransactions() {
+    public synchronized void deleteTransactions() {
         deleteAllTransactions();
         clearStatistics();
     }
