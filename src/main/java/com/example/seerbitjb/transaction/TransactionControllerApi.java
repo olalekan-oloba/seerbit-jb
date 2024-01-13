@@ -8,6 +8,7 @@ import com.example.seerbitjb.util.ApiResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import static com.example.seerbitjb.util.Util.olderThanAge;
 @RequiredArgsConstructor
 @RestController
 @Tag(name ="Transaction API Controller",description = "Transaction Management")
+@SecurityRequirements()
 public class TransactionControllerApi {
 
     private final TransactionService postTransactionService;
@@ -32,7 +34,7 @@ public class TransactionControllerApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Success")
     })
-    @Operation(summary = "Post Transaction", description = "")
+    @Operation(summary = "Post Transaction API", description = "")
     @PostMapping("transactions")
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<ApiDataResponse<EmptyResponseBody>> postTransaction(@Valid @RequestBody TransactionRequestDto transactionRequestDto) {
@@ -55,7 +57,7 @@ public class TransactionControllerApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Success"),
     })
-    @Operation(summary = "Delete all transactions", description = "")
+    @Operation(summary = "Delete all transactions API", description = "")
     @DeleteMapping(value = "/transactions")
     public ResponseEntity<ApiDataResponse<EmptyResponseBody>> deleteTransactions(@RequestBody EmptyResponseBody body ) throws Exception {
         this.postTransactionService.deleteTransactions();
