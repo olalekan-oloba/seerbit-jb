@@ -3,6 +3,8 @@ package com.example.seerbitjb.transaction;
 
 import com.example.seerbitjb.config.PropertiesConfig;
 import com.example.seerbitjb.util.TestUtils;
+import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +24,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static com.example.seerbitjb.util.CustomDateUtils.*;
@@ -32,6 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -180,6 +185,37 @@ public class TransactionControllerTest {
                 arguments(jo.toString())
         );
     }
+
+
+
+    //fetch statistics
+    @Test
+    void shouldFetchStatisticsSuccessfully() throws Exception {
+
+        //arrange
+        var statisticsDetailsDto = StatisticsDetailsDto.builder()
+                .avg(BigDecimal.valueOf(10.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .count("20")
+                .max(BigDecimal.valueOf(20.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .min(BigDecimal.valueOf(30.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .sum(BigDecimal.valueOf(40.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .build();
+
+        when(this.postTransactionService.getStatistics()).thenReturn(statisticsDetailsDto);
+
+        //act
+       var resultActions= mockMvc.perform(get("/statistics"));
+
+       //assert
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message", Is.is("Retrieved successfully")))
+                .andExpect(jsonPath("$.data.avg").value("10.00"))
+                .andExpect(jsonPath("$.data.count").value("20"))
+                .andExpect(jsonPath("$.data.max").value("20.00"))
+                .andExpect(jsonPath("$.data.min").value("30.00"))
+                .andExpect(jsonPath("$.data.sum").value("40.00"));
+    }
+
 
 
     private void assertEmptyBody(MvcResult mvcResult) throws UnsupportedEncodingException {

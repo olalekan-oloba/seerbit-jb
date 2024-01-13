@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -282,5 +283,24 @@ public class TransactionRepositoryTest {
         assertThat(repository.getTransactionCount(), is(equalTo(1L)));
         assertThat(repository.getTransactionSum(), is(equalTo(BigDecimal.valueOf(5.00))));
     }
+
+    @Test
+    void givenStaticsExist_WhenGetStatics_ShouldSucced() throws Exception {
+        //arrange
+        repository.setTransactionMax(BigDecimal.valueOf(40.00).setScale(2, RoundingMode.HALF_UP));
+        repository.setTransactionMin(BigDecimal.valueOf(30.00).setScale(2, RoundingMode.HALF_UP));
+        repository.setTransactionSum(BigDecimal.valueOf(140.00).setScale(2, RoundingMode.HALF_UP));
+        repository.setTransactionCount(10L);
+        //act
+        var statistic=this.repository.getStatistics();
+        //assert
+       //avrg is sum divided by count
+        assertThat(statistic.getAvg(), is(equalTo(BigDecimal.valueOf(14.00).setScale(2, RoundingMode.HALF_UP))));
+        assertThat(statistic.getMax(), is(equalTo(BigDecimal.valueOf(40.00).setScale(2, RoundingMode.HALF_UP))));
+        assertThat(statistic.getMin(), is(equalTo(BigDecimal.valueOf(30.00).setScale(2, RoundingMode.HALF_UP))));
+        assertThat(statistic.getSum(), is(equalTo(BigDecimal.valueOf(140.00).setScale(2, RoundingMode.HALF_UP))));
+        assertThat(statistic.getCount(), is(equalTo(10L)));
+    }
+
 
 }

@@ -13,13 +13,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 import static com.example.seerbitjb.util.CustomDateUtils.nowInstant;
 import static com.example.seerbitjb.util.Util.olderThanAge;
@@ -44,6 +40,17 @@ public class TransactionControllerApi {
         var httpStatus = processResponseStatus(transactionRequestDto.getTimeStamp());
         return ApiResponseUtil.response(httpStatus, new EmptyResponseBody(), "Resource created successfully");
     }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+    })
+    @Operation(summary = "Fetch statistics API", description = "")
+    @GetMapping(value = "/statistics")
+    public ResponseEntity<ApiDataResponse<StatisticsDetailsDto>> getStatistics() throws Exception {
+        return ApiResponseUtil.response(HttpStatus.OK, postTransactionService.getStatistics(), "Retrieved successfully");
+    }
+
 
     private HttpStatus processResponseStatus(Instant requestTransactionDate) {
         //get current time

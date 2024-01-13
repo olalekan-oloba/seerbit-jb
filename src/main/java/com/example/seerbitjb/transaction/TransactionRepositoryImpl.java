@@ -1,18 +1,14 @@
 package com.example.seerbitjb.transaction;
 
 import com.example.seerbitjb.config.PropertiesConfig;
-import com.example.seerbitjb.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.seerbitjb.util.CustomDateUtils.nowInstant;
 import static com.example.seerbitjb.util.Util.olderThanAge;
 
 @Setter
@@ -42,6 +38,17 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             updateTransactionMin(transaction.getAmount());
             updateTransactionCount();
         }
+    }
+
+    @Override
+    public Statistics getStatistics() {
+        var statistic=new Statistics();
+        statistic.setMax(transactionMax);
+        statistic.setMin(transactionMin);
+        statistic.setCount(transactionCount);
+        statistic.setSum(transactionSum);
+        statistic.calculateAvrg();
+        return statistic;
     }
 
 
