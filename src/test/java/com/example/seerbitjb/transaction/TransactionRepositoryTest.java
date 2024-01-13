@@ -40,6 +40,11 @@ public class TransactionRepositoryTest {
         reset();
     }
 
+    @AfterEach
+    void setUpAfterEach() throws Exception {
+        //reset repository data
+        reset();
+    }
     private void reset() {
         repository.setTransactions(new ArrayList<>());
         repository.setTransactionSum(null);

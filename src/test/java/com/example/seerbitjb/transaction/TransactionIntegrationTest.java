@@ -5,6 +5,8 @@ import com.example.seerbitjb.util.TestUtils;
 import lombok.RequiredArgsConstructor;
 import org.hamcrest.core.Is;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +37,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TransactionIntegrationTest  {
 
     @Autowired
-    TransactionRepository transactionRepository;
+    TransactionRepositoryImpl transactionRepository;
     @Autowired
     protected MockMvc mockMvc;
     HttpHeaders headers=new HttpHeaders();
+
+    @BeforeEach
+    void setUp() throws Exception {
+        //reset repository data
+        reset();
+    }
+    @AfterEach
+    void setUpAfterEach() throws Exception {
+        //reset repository data
+        reset();
+    }
+
+    private void reset() {
+        transactionRepository.setTransactions(null);
+        transactionRepository.setTransactionSum(null);
+        transactionRepository.setTransactionMax(null);
+        transactionRepository.setTransactionMin(null);
+        transactionRepository.setTransactionCount(0);
+    }
+
 
     @Test
     void givenTransactionNotExist_WhenUserPostTransactiom_ShouldSucceed() throws Exception {
@@ -52,7 +74,7 @@ public class TransactionIntegrationTest  {
 
         resultActions.andExpect(status().isCreated());
 
-        assertThat(1, is(equalTo(transactionRepository.getTransactions().size())));
+        assertThat(transactionRepository.getTransactions().size(), is(equalTo(1)));
     }
 
 
