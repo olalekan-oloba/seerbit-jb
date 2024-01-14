@@ -8,8 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,14 +20,16 @@ public class AlgorithmSolutionsTest {
     AlgorithmSolutions algorithmSolutions;
 
     @ParameterizedTest
-    @MethodSource("intervalPairsProvider")
-    void intervalPairsProvider(int[] intervalPairs, int[] maximumSubArray) throws Exception {
-      //TODO
+    @MethodSource("mergeOverlappingIntervalsProvider")
+    void intervalPairsProvider(int[][] intervalPairs, int[][] maximumSubArray) throws Exception {
+        //assertEquals(maximumSubArray, algorithmSolutions.mergeOverlappingIntervals(intervalPairs));
     }
 
-    static Stream<Arguments> intervalPairsProvider() {
+    static Stream<Arguments> mergeOverlappingIntervalsProvider() {
         return Stream.of(
-                arguments(new int[]{1,2,3,4}, new int[]{3,4})
+                arguments(new int[][]{{ 1, 4 }, { 4, 5 }}, new int[][]{{ 1, 5 }}),
+                arguments(new int[][]{{ 1, 3 }, { 4, 6 },{ 8, 10 }, { 15, 18 }}, new int[][]{{ 1, 5 }})
+
         );
     }
 }
