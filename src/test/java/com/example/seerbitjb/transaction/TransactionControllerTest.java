@@ -61,7 +61,7 @@ public class TransactionControllerTest {
     void shouldFail_With400_WhenPostTransactionWithInvalidJson(String requestPayload) throws Exception {
         //input
         mockMvc.perform(post("/transactions").contentType("application/json").content(requestPayload))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
@@ -79,7 +79,21 @@ public class TransactionControllerTest {
                             "amount": "",
                              "timeStamp": ""
                             }
-                        """)
+                        """),
+                arguments("""
+                            {
+                            "amount" "", //missing colon
+                             "timeStamp": ""
+                            }
+                        """
+                ),
+                arguments("""
+                            {
+                            "amount":", //missing closing literal
+                             "timeStamp": ""
+                            }
+                        """
+                )
 
         );
     }
@@ -99,7 +113,7 @@ public class TransactionControllerTest {
     static Stream<Arguments> nonParseableFieldsProvider() {
         //argument format {jsonPayload}
         return Stream.of(
-                arguments("{\"amount\": \"stringAmnt\",\""+nowInstant()+"\": \"\"}"), //arbitrary string amount
+                arguments("{\"amount\": \"stringAmnt\",\"" + nowInstant() + "\": \"\"}"), //arbitrary string amount
                 arguments("{\"amount\": \"12.3343\",\"timeStamp\": \"xxxx\"}"), //arbitary timestamp string supplied
                 arguments("{\"amount\": \"12.3343\",\"timeStamp\": \"2018/07/17T09:59:51.312Z\"}"), // invalid date format
                 arguments("{\"amount\": \"12.3343\",\"timeStamp\": \"2018-07-17\"}"), // only date supplied
@@ -149,7 +163,7 @@ public class TransactionControllerTest {
                 .andDo(print());
         //assert empty body
         assertEmptyBody(resultAction.andReturn());
-         //assert
+        //assert
         var transactionCaptor = ArgumentCaptor.forClass(TransactionRequestDto.class);
         verify(postTransactionService, times(1)).createTransaction(transactionCaptor.capture());
         assertThat(transactionCaptor.getValue().getAmount(), is(equalTo(BigDecimal.valueOf(10).setScale(2, RoundingMode.HALF_UP))));
@@ -186,26 +200,25 @@ public class TransactionControllerTest {
     }
 
 
-
     //fetch statistics
     @Test
     void shouldFetchStatisticsSuccessfully() throws Exception {
 
         //arrange
         var statisticsDetailsDto = StatisticsDetailsDto.builder()
-                .avg(BigDecimal.valueOf(10.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .avg(BigDecimal.valueOf(10.00).setScale(2, RoundingMode.HALF_UP).toString())
                 .count("20")
-                .max(BigDecimal.valueOf(20.00).setScale(2,RoundingMode.HALF_UP).toString())
-                .min(BigDecimal.valueOf(30.00).setScale(2,RoundingMode.HALF_UP).toString())
-                .sum(BigDecimal.valueOf(40.00).setScale(2,RoundingMode.HALF_UP).toString())
+                .max(BigDecimal.valueOf(20.00).setScale(2, RoundingMode.HALF_UP).toString())
+                .min(BigDecimal.valueOf(30.00).setScale(2, RoundingMode.HALF_UP).toString())
+                .sum(BigDecimal.valueOf(40.00).setScale(2, RoundingMode.HALF_UP).toString())
                 .build();
 
         when(this.postTransactionService.getStatistics()).thenReturn(statisticsDetailsDto);
 
         //act
-       var resultActions= mockMvc.perform(get("/statistics"));
+        var resultActions = mockMvc.perform(get("/statistics"));
 
-       //assert
+        //assert
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", Is.is("Retrieved successfully")))
                 .andExpect(jsonPath("$.data.avg").value("10.00"))
@@ -216,13 +229,12 @@ public class TransactionControllerTest {
     }
 
 
-
     @Test
     void shouldDeleteTransactionsSuccessfully() throws Exception {
         //arrange
         doNothing().when(postTransactionService).deleteTransactions();
         //act
-        var resultActions= mockMvc.perform(delete("/transactions").contentType("application/json").content(new JSONObject().toString()));
+        var resultActions = mockMvc.perform(delete("/transactions").contentType("application/json").content(new JSONObject().toString()));
         //assert
         verify(postTransactionService, times(1)).deleteTransactions();
 

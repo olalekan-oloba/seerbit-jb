@@ -2,6 +2,7 @@ package com.example.seerbitjb.config;
 
 
 import com.example.seerbitjb.apiresponse.ApiDataResponse;
+import com.example.seerbitjb.util.JsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,15 @@ public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionH
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ApiDataResponse<?> apiResponse = new ApiDataResponse<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        return new ResponseEntity<>(apiResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+        HttpStatus httpStatus;
+        if(JsonUtil.isValidJsonRequest(ex.getCause())){
+            httpStatus=HttpStatus.UNPROCESSABLE_ENTITY;
+        }else{
+            httpStatus=HttpStatus.BAD_REQUEST;
+        }
+
+        ApiDataResponse<?> apiResponse = new ApiDataResponse<>(httpStatus);
+        return new ResponseEntity<>(apiResponse, httpStatus);
     }
 
 
