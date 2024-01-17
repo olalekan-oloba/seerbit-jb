@@ -4,6 +4,7 @@ package com.example.seerbitjb.config;
 import com.example.seerbitjb.apiresponse.ApiDataResponse;
 import com.example.seerbitjb.util.JsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionH
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                  @NonNull HttpHeaders headers,@NonNull HttpStatusCode status,@NonNull WebRequest request) {
         ApiDataResponse<?> apiResponse = new ApiDataResponse<>(HttpStatus.UNPROCESSABLE_ENTITY);
         apiResponse.addValidationErrors(ex.getBindingResult().getFieldErrors());
         return new ResponseEntity<>(apiResponse, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -35,7 +36,7 @@ public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionH
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                  @NonNull HttpHeaders headers,@NonNull HttpStatusCode status,@NonNull WebRequest request) {
         HttpStatus httpStatus;
         if(JsonUtil.isValidJsonRequest(ex.getCause())){
             httpStatus=HttpStatus.UNPROCESSABLE_ENTITY;
