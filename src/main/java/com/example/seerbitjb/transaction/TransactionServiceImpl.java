@@ -42,11 +42,11 @@ public class TransactionServiceImpl implements TransactionService {
     private StatisticsDetailsDto mapStatisticModelToDto(Statistics statistic) {
         //TODO: use a mapper class
         return StatisticsDetailsDto.builder()
-                .avg(statistic.getAvg()==null?"0.00":statistic.getAvg().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
+                .avg(statistic.getAvg().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
                 .count(String.valueOf(statistic.getCount()))
-                .max(statistic.getMax()==null?"0.00":statistic.getMax().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
-                .min(statistic.getMin()==null?"0.00":statistic.getMin().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
-                .sum(statistic.getSum()==null?"0.00":statistic.getSum().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
+                .max(statistic.getMax().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
+                .min(statistic.getMin().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
+                .sum(statistic.getSum().setScale(BIGDECIMAL_SCALE,RoundingMode.HALF_UP).toString())
                 .build();
     }
 

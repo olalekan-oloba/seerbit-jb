@@ -326,10 +326,10 @@ public class TransactionRepositoryTest {
         //act
         this.repository.deleteTransactions();
         //assert stats cleared
-        assertThat(repository.getTransactionMax(), is(equalTo(null)));
-        assertThat(repository.getTransactionMin(), is(equalTo(null)));
+        assertThat(repository.getTransactionMax(), is(equalTo(BigDecimal.ZERO)));
+        assertThat(repository.getTransactionMin(), is(equalTo(BigDecimal.ZERO)));
         assertThat(repository.getTransactionCount(), is(equalTo(0L)));
-        assertThat(repository.getTransactionSum(), is(equalTo(null)));
+        assertThat(repository.getTransactionSum(), is(equalTo(BigDecimal.ZERO)));
         assertThat(repository.getTransactions(), is(equalTo(null)));
     }
 

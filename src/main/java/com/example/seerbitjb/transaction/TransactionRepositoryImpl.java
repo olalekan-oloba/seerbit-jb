@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,11 @@ import static com.example.seerbitjb.util.Util.olderThanAge;
 @Getter
 @Component
 public class TransactionRepositoryImpl implements TransactionRepository {
+    @Nullable
     private List<Transaction> transactions ;
-    private BigDecimal transactionSum;
-    private BigDecimal transactionMax;
-    private BigDecimal transactionMin;
+    private BigDecimal transactionSum=BigDecimal.ZERO;
+    private BigDecimal transactionMax=BigDecimal.ZERO;
+    private BigDecimal transactionMin=BigDecimal.ZERO;
     private long transactionCount;
     private PropertiesConfig propertiesConfig;
 
@@ -67,9 +69,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private void clearStatistics() {
         this.setTransactionCount(0);;
-        this.setTransactionMin(null);
-        this.setTransactionMax(null);
-        this.setTransactionSum(null);
+        this.setTransactionMin(BigDecimal.ZERO);
+        this.setTransactionMax(BigDecimal.ZERO);
+        this.setTransactionSum(BigDecimal.ZERO);
     }
 
     private void deleteAllTransactions() {

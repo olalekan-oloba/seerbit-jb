@@ -1,13 +1,13 @@
 package com.example.seerbitjb.apiresponse;
 
+import jakarta.annotation.Nullable;
+
 public class ApiValidationError extends ApiSubError {
   private String field;
+  @Nullable
   private Object rejectedValue;
   private String message;
 
-  ApiValidationError( String message) {
-    this.message = message;
-  }
 
   public ApiValidationError(String field, String message) {
     this.field = field;
@@ -28,11 +28,11 @@ public class ApiValidationError extends ApiSubError {
     this.field = field;
   }
 
-  public Object getRejectedValue() {
+  public  @Nullable Object getRejectedValue() {
     return rejectedValue;
   }
 
-  public void setRejectedValue(Object rejectedValue) {
+  public void setRejectedValue(@Nullable Object rejectedValue) {
     this.rejectedValue = rejectedValue;
   }
 

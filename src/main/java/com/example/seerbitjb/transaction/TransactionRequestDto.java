@@ -3,21 +3,19 @@ package com.example.seerbitjb.transaction;
 import com.example.seerbitjb.util.CustomDateUtils;
 import com.example.seerbitjb.validator.date.FutureDate;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SuppressWarnings("NullAway.Init")
 public class TransactionRequestDto {
     @NotNull
     @Schema( example ="144.00")

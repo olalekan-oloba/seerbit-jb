@@ -10,10 +10,10 @@ import java.math.RoundingMode;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Statistics {
-    private BigDecimal sum;
-    private BigDecimal avg;
-    private BigDecimal max;
-    private BigDecimal min;
+    private BigDecimal sum=BigDecimal.ZERO;
+    private BigDecimal avg=BigDecimal.ZERO;
+    private BigDecimal max=BigDecimal.ZERO;
+    private BigDecimal min=BigDecimal.ZERO;
     private long count;
 
     public void calculateAvrg() {

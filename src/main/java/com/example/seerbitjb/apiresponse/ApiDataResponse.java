@@ -2,6 +2,9 @@ package com.example.seerbitjb.apiresponse;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.annotation.Nullable;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
@@ -12,18 +15,26 @@ import java.util.List;
 /**
  * ApiDataResponse
  */
+@Setter
+@Getter
 @JsonInclude(JsonInclude.Include.ALWAYS)
 public class ApiDataResponse<T> {
 
   private HttpStatus status;
+  @Nullable
   private String message;
+  @Nullable
   private String errorCode;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   private LocalDateTime timestamp;
+  @Nullable
   private String debugMessage;
+  @Nullable
   private List<ApiSubError> subErrors;
+  @Nullable
   private T data;
 
+  @SuppressWarnings("NullAway")
   private ApiDataResponse() {
     timestamp = LocalDateTime.now();
   }
@@ -53,61 +64,5 @@ public class ApiDataResponse<T> {
     fieldErrors.forEach(this::addValidationError);
   }
 
-
-  public HttpStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(HttpStatus status) {
-    this.status = status;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public String getErrorCode() {
-    return errorCode;
-  }
-
-  public void setErrorCode(String errorCode) {
-    this.errorCode = errorCode;
-  }
-
-  public LocalDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(LocalDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public String getDebugMessage() {
-    return debugMessage;
-  }
-
-  public void setDebugMessage(String debugMessage) {
-    this.debugMessage = debugMessage;
-  }
-
-  public List<ApiSubError> getSubErrors() {
-    return subErrors;
-  }
-
-  public void setSubErrors(List<ApiSubError> subErrors) {
-    this.subErrors = subErrors;
-  }
-
-  public T getData() {
-    return data;
-  }
-
-  public void setData(T data) {
-    this.data = data;
-  }
 
 }

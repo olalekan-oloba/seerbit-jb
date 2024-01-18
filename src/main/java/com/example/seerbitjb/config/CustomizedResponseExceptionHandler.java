@@ -3,10 +3,8 @@ package com.example.seerbitjb.config;
 
 import com.example.seerbitjb.apiresponse.ApiDataResponse;
 import com.example.seerbitjb.util.JsonUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -22,9 +20,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestController
 @Slf4j
 public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @Autowired
-    HttpServletRequest httpServletRequest;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SuppressWarnings("NullAway.Init")
 public class StatisticsDetailsDto {
     private String sum;
     private String avg;
