@@ -9,3 +9,10 @@ app:
 
 server:
   port: ${PORT:5000}
+
+# ============ACTUATOR===================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"
